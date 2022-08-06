@@ -11,9 +11,9 @@
 ### 📥下载
 
     1. 使用git下载  
-    git clone xxxxxx
+    git clone https://github.com/jgckM/movie_data.git
 
-    或者直接下载源码
+    # 或者直接下载源码
 
 ### 🚙使用
 1. 请自行创建MySql数据库 
