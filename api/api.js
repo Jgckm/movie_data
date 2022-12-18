@@ -1,26 +1,33 @@
 const axios = require('axios')
 const Mysql = require('../utils/sql')
-const config_type_id = require('../config/http_config')
+const http_config = require('../config/http_config')
 
 
-const TYPE_ID =  config_type_id.type_id
+const TYPE_ID = http_config.type_id
 /**
  * 第一次全部获取模块
  *
  */
 
 
-
 const sql = new Mysql()
 
 
-async function Pageconst(){
-        await axios.get(`https://www.feisuzyapi.com/api.php/provide/vod/from/fsm3u8/?ac=detail&t=${TYPE_ID}&pg=1`).then((data) => {
-            console.log(data.data.pagecount)
-            getData(data.data.pagecount)
-        }).catch(reason =>{
-            console.log('请求发生出错误！----》', i + '\n' + reason)
-        })
+async function main() {
+    if (!http_config.chooseTypeName(http_config.type_id)) {
+        return
+    }
+    await axios.get(`https://www.feisuzyapi.com/api.php/provide/vod/from/fsm3u8/?ac=detail&t=${TYPE_ID}&pg=1`).then((data) => {
+        console.log(data.data.pagecount)
+        if (data.data.pagecount === 0) {
+            console.log('没有数据')
+            close_sql()
+            return
+        }
+        getData(data.data.pagecount)
+    }).catch(reason => {
+        console.log('请求发生出错误！----》', i + '\n' + reason)
+    })
 }
 
 
@@ -31,12 +38,13 @@ async function getData(page) {
             data_list.forEach(item => {
                 addData(item)
             })
-        }).catch(reason =>{
+        }).catch(reason => {
             console.log('请求发生出错误！----》', i + '\n' + reason)
         })
-        if (i === page){
-            console.log('爬取完毕')
-            sql.close()
+        if (i === page) {
+            // console.log('爬取完毕')
+            // sql.close()
+            setTimeout(close_sql, 2000)
             break
         }
     }
@@ -68,14 +76,14 @@ function addData(selData) {
 }
 
 
-function close_sql(){
+function close_sql() {
     sql.close()
     console.log('更新完毕')
 }
 
 
 module.exports = {
-    Pageconst,
+    main,
     addData,
     close_sql
 }

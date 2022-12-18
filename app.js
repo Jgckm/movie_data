@@ -1,7 +1,14 @@
-const  {Pageconst} = require('./api/api')
+const {main} = require('./api/api')
+const {getupdate} = require('./api/upApi')
 
 /**
  * 更新数据
  */
-Pageconst()
+main()
+
+
+/**
+ * 24内更新数据
+ */
+// getupdate()
 
